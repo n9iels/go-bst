@@ -15,7 +15,7 @@ type BinarySearchTree struct {
 }
 
 // Internal insert method
-func (bts BinarySearchTree) Insert(root *Node, key int, value string) {
+func (bst BinarySearchTree) Insert(root *Node, key int, value string) {
 	var newNode = &Node{key, value, nil, nil, root}
 
 	if root.Left == nil && key < root.Key {
@@ -23,44 +23,44 @@ func (bts BinarySearchTree) Insert(root *Node, key int, value string) {
 	} else if root.Right == nil && key > root.Key {
 		root.Right = newNode
 	} else if key < root.Key {
-		bts.Insert(root.Left, key, value)
+		bst.Insert(root.Left, key, value)
 	} else {
-		bts.Insert(root.Right, key, value)
+		bst.Insert(root.Right, key, value)
 	}
 }
 
 // Internal traversal method
-func (bts *BinarySearchTree) Traverse(node *Node, key int) *Node {
+func (bst *BinarySearchTree) Traverse(node *Node, key int) *Node {
 	if key > node.Key {
-		return bts.Traverse(node.Right, key)
+		return bst.Traverse(node.Right, key)
 	} else if key < node.Key {
-		return bts.Traverse(node.Left, key)
+		return bst.Traverse(node.Left, key)
 	}
 
 	return node
 }
 
 // External add method
-func (bts *BinarySearchTree) Add(key int, value string) {
-	if bts.Root == nil {
-		bts.Root = &Node{key, value, nil, nil, nil}
+func (bst *BinarySearchTree) Add(key int, value string) {
+	if bst.Root == nil {
+		bst.Root = &Node{key, value, nil, nil, nil}
 	} else {
-		bts.Insert(bts.Root, key, value)
+		bst.Insert(bst.Root, key, value)
 	}
 }
 
 // External search method
-func (bts *BinarySearchTree) Search(key int) *Node {
-	return bts.Traverse(bts.Root, key)
+func (bst *BinarySearchTree) Search(key int) *Node {
+	return bst.Traverse(bst.Root, key)
 }
 
 func main() {
-	var bts = BinarySearchTree{}
-	bts.Add(6, "six")
-	bts.Add(5, "five")
-	bts.Add(7, "seven")
-	bts.Add(3, "three")
-	bts.Add(1, "one")
+	var bst = BinarySearchTree{}
+	bst.Add(6, "six")
+	bst.Add(5, "five")
+	bst.Add(7, "seven")
+	bst.Add(3, "three")
+	bst.Add(1, "one")
 
-	fmt.Println(bts.Search(1).Value)
+	fmt.Println(bst.Search(1).Value)
 }
