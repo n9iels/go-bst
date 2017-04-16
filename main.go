@@ -14,44 +14,48 @@ type BinarySearchTree struct {
 	Root *Node
 }
 
-// Internal insert method
-func (bst BinarySearchTree) Insert(root *Node, key int, value string) {
-	var newNode = &Node{key, value, nil, nil, root}
-
-	if root.Left == nil && key < root.Key {
-		root.Left = newNode
-	} else if root.Right == nil && key > root.Key {
-		root.Right = newNode
-	} else if key < root.Key {
-		bst.Insert(root.Left, key, value)
-	} else {
-		bst.Insert(root.Right, key, value)
+func (root *Node) isLeaf() bool {
+	if root.Left == nil && root.Right == nil {
+		return true
 	}
+	return false
+}
+
+// Internal insert method
+// internal method are starting lowercase
+func (root *Node) insert(key int, value string, parent *Node) *Node {
+	if root == nil {
+		return &Node{Key: key, Value: value, Parent: parent}
+	} else if key < root.Key {
+		root.Left = root.Left.insert(key, value, root)
+	} else {
+		root.Right = root.Right.insert(key, value, root)
+	}
+	return root
 }
 
 // Internal traversal method
-func (bst *BinarySearchTree) Traverse(node *Node, key int) *Node {
-	if key > node.Key {
-		return bst.Traverse(node.Right, key)
-	} else if key < node.Key {
-		return bst.Traverse(node.Left, key)
+
+func (root *Node) traverse(key int) *Node {
+	if root == nil {
+		panic("could not found the key") // do not know if a panic is the best solution for GO
+	} else if key > root.Key {
+		return root.Right.traverse(key)
+	} else if key < root.Key {
+		return root.Left.traverse(key)
 	}
 
-	return node
+	return root
 }
 
-// External add method
+// Add add a new value to the tree
 func (bst *BinarySearchTree) Add(key int, value string) {
-	if bst.Root == nil {
-		bst.Root = &Node{key, value, nil, nil, nil}
-	} else {
-		bst.Insert(bst.Root, key, value)
-	}
+	bst.Root = bst.Root.insert(key, value, nil)
 }
 
-// External search method
+// Search lookup for a Node with a specific key
 func (bst *BinarySearchTree) Search(key int) *Node {
-	return bst.Traverse(bst.Root, key)
+	return bst.Root.traverse(key)
 }
 
 func main() {
@@ -62,5 +66,7 @@ func main() {
 	bst.Add(3, "three")
 	bst.Add(1, "one")
 
-	fmt.Println(bst.Search(1).Value)
+	var result = bst.Search(3)
+	fmt.Println(result.Value)
+	fmt.Println(result.isLeaf())
 }
